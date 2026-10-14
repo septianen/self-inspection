@@ -11,7 +11,7 @@ import * as cameraTest from './tests/camera.js';
 import * as speakerTest from './tests/speaker.js';
 import * as micTest from './tests/mic.js';
 import { renderSummary, renderReady } from './screen-result.js';
-import { PUBLIC_BASE_URL, TEST_KEYS, buildDetail, buildAdText } from './report-text.js';
+import { TEST_KEYS, buildDetail, buildAdText } from './report-text.js';
 import {
   requestMediaPermissions, keepScreenOn, allowScreenOff, exitFullscreen, copyText, showToast,
 } from './util.js';
@@ -379,14 +379,21 @@ function buildPayload() {
   };
 }
 
-// SEMENTARA (M5): ID dibuat di browser, belum ada server. M6 menggantinya dengan
-// POST /api/reports yang mengembalikan { id, url, adText } dari server.
+// Kirim laporan ke server. Server memvalidasi ulang, membuat ID, dan mengembalikan
+// { id, url, adText (sudah berisi ID asli), createdAt }.
 async function createReport(payload) {
-  await new Promise((resolve) => setTimeout(resolve, 600));
-  const alphabet = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
-  let id = '';
-  for (let i = 0; i < 6; i++) id += alphabet[Math.floor(Math.random() * alphabet.length)];
-  return { id, url: `${PUBLIC_BASE_URL}/r/${id}`, adText: payload.adText.replaceAll('{ID}', id) };
+  const res = await fetch('/api/reports', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const error = new Error(data.error || `HTTP ${res.status}`);
+    error.userMessage = res.status === 429 || res.status === 400 ? data.error : null;
+    throw error;
+  }
+  return data;
 }
 
 const createBtn = document.getElementById('btn-create-report');
@@ -405,7 +412,7 @@ createBtn.addEventListener('click', async () => {
     saveState();
     showScreen('ready');
   } catch (error) {
-    showToast('Gagal membuat laporan. Periksa koneksi, lalu coba lagi.');
+    showToast(error.userMessage || 'Gagal membuat laporan. Periksa koneksi, lalu coba lagi.');
   } finally {
     createBtn.disabled = false;
     createBtn.textContent = 'Buat Laporan';
