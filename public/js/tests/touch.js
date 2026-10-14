@@ -59,6 +59,33 @@ export function run(container, ctx) {
     container.appendChild(root);
     updateCount();
 
+    // Panel debug sementara: buka halaman dengan ?debug di URL untuk melihat ukuran layar.
+    if (new URLSearchParams(location.search).has('debug')) {
+      const box = document.createElement('pre');
+      box.style.cssText = 'position:absolute;left:8px;top:70px;margin:0;padding:6px 8px;' +
+        'background:rgba(0,0,0,.75);color:#0f0;font:11px/1.35 monospace;pointer-events:none;z-index:5';
+      root.appendChild(box);
+      const dump = () => {
+        const vv = window.visualViewport;
+        const r = root.getBoundingClientRect();
+        const g = grid.getBoundingClientRect();
+        const b = failBtn.getBoundingClientRect();
+        box.textContent = [
+          `innerH ${window.innerHeight}  innerW ${window.innerWidth}`,
+          `vv ${vv ? Math.round(vv.height) + 'x' + Math.round(vv.width) + ' s' + vv.scale.toFixed(2) : '-'}`,
+          `screen ${screen.height}x${screen.width} dpr ${devicePixelRatio}`,
+          `layer ${Math.round(r.top)}..${Math.round(r.bottom)} h${Math.round(r.height)}`,
+          `grid ${Math.round(g.top)}..${Math.round(g.bottom)}`,
+          `btn ${Math.round(b.top)}..${Math.round(b.bottom)}`,
+          `appH ${getComputedStyle(document.documentElement).getPropertyValue('--app-height')}`,
+          `fs ${isFullscreen()} docH ${document.documentElement.clientHeight}`,
+        ].join('\n');
+      };
+      dump();
+      const t = setInterval(dump, 500);
+      timers.add(t);
+    }
+
     // ---------- Logika grid ----------
     function updateCount() {
       countEl.textContent = `${count}/${TOTAL}`;
