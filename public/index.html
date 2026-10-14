@@ -90,19 +90,115 @@
       </footer>
     </section>
 
-    <!-- Placeholder M1: Data HP -->
+    <!-- Izin kamera & mikrofon (layar tambahan, tidak ada di mockup) -->
+    <section class="screen" data-screen="permission">
+      <header class="screen-header has-divider">
+        <button type="button" class="icon-btn" data-action="back" aria-label="Kembali"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></button>
+        <h2 tabindex="-1">Izin kamera &amp; mikrofon</h2>
+      </header>
+      <main class="permission-body">
+        <div class="permission-icon">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 018 0v4"></path></svg>
+        </div>
+        <h1 class="screen-title" tabindex="-1">Izinkan kamera dan mikrofon</h1>
+        <p class="lead">Self Inspection butuh akses kamera dan mikrofon untuk menjalankan tes.</p>
+        <ol class="steps">
+          <li>Ketuk ikon di kiri alamat web</li>
+          <li>Pilih Izin</li>
+          <li>Aktifkan Kamera dan Mikrofon</li>
+        </ol>
+      </main>
+      <footer class="screen-footer">
+        <button type="button" class="btn-primary" id="btn-permission-retry">Coba lagi</button>
+        <button type="button" class="btn-text" id="btn-permission-skip">Lanjut tanpa izin</button>
+      </footer>
+    </section>
+
+    <!-- Data HP -->
     <section class="screen" data-screen="data">
       <header class="screen-header has-divider">
-        <button type="button" class="icon-btn" data-action="back" aria-label="Kembali">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
-        </button>
+        <button type="button" class="icon-btn" data-action="back" aria-label="Kembali"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></button>
         <h2 tabindex="-1">Data HP</h2>
       </header>
-      <main class="placeholder-body">
-        <p class="lead">Placeholder M1. Form Data HP dibuat di M2.</p>
+
+      <main class="form-body">
+        <section class="panel detected">
+          <div class="detected-head">
+            <span class="detected-title">Terdeteksi otomatis</span>
+            <span class="detected-source">Dari browser</span>
+          </div>
+          <div class="detected-grid">
+            <div><span class="detected-label">Sistem operasi</span><span class="detected-value" data-device="os">…</span></div>
+            <div><span class="detected-label">Browser</span><span class="detected-value" data-device="browser">…</span></div>
+            <div><span class="detected-label">Resolusi layar</span><span class="detected-value mono" data-device="screen">…</span></div>
+            <div><span class="detected-label">RAM</span><span class="detected-value" data-device="ram">…</span></div>
+            <div><span class="detected-label">Prosesor</span><span class="detected-value" data-device="cpu">…</span></div>
+            <div><span class="detected-label">Baterai saat ini</span><span class="detected-value" data-device="battery">…</span></div>
+          </div>
+        </section>
+
+        <form class="form" id="phone-form" novalidate>
+          <h2 class="section-title">Isi data HP</h2>
+
+          <div class="field">
+            <label class="field-label" for="f-brand">Merek</label>
+            <div class="select-wrap">
+              <select class="select" id="f-brand" required>
+                <option value="" disabled selected>Pilih merek</option>
+                <option>Samsung</option><option>Xiaomi</option><option>OPPO</option><option>vivo</option><option>realme</option><option>Lainnya</option>
+              </select>
+              <svg class="select-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="f-model">Model</label>
+            <input class="input" id="f-model" type="text" maxlength="60" autocomplete="off" placeholder="Contoh: Galaxy A54 5G" required>
+          </div>
+
+          <div class="field">
+            <span class="field-label" id="l-storage">Penyimpanan</span>
+            <div class="chip-row" id="f-storage" role="group" aria-labelledby="l-storage">
+            <button type="button" class="chip" data-value="64 GB" aria-pressed="false">64 GB</button>
+            <button type="button" class="chip" data-value="128 GB" aria-pressed="false">128 GB</button>
+            <button type="button" class="chip" data-value="256 GB" aria-pressed="false">256 GB</button>
+            <button type="button" class="chip" data-value="512 GB" aria-pressed="false">512 GB</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="f-color">Warna</label>
+            <input class="input" id="f-color" type="text" maxlength="30" autocomplete="off" placeholder="Contoh: Hitam">
+          </div>
+
+          <div class="field">
+            <span class="field-label" id="l-accessories">Kelengkapan</span>
+            <div class="chip-row" id="f-accessories" role="group" aria-labelledby="l-accessories">
+            <button type="button" class="chip" data-value="Dus" aria-pressed="false"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>Dus</button>
+            <button type="button" class="chip" data-value="Kabel data" aria-pressed="false"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>Kabel data</button>
+            <button type="button" class="chip" data-value="Kepala charger" aria-pressed="false"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>Kepala charger</button>
+            <button type="button" class="chip" data-value="Nota pembelian" aria-pressed="false"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>Nota pembelian</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="field-label" id="l-condition">Kondisi fisik</span>
+            <div class="option-list" role="radiogroup" aria-labelledby="l-condition">
+              <label class="option"><input type="radio" name="condition" value="like_new">Mulus, seperti baru</label>
+              <label class="option"><input type="radio" name="condition" value="minor_scratches">Lecet halus bekas pemakaian</label>
+              <label class="option"><input type="radio" name="condition" value="cracked">Ada retak atau penyok</label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="f-notes">Catatan <span class="optional">(opsional)</span></label>
+            <textarea class="textarea" id="f-notes" rows="3" maxlength="300"></textarea>
+          </div>
+        </form>
       </main>
+
       <footer class="screen-footer has-divider">
-        <button type="button" class="btn-primary" data-goto="test-1">Lanjut ke Tes</button>
+        <button type="button" class="btn-primary" id="btn-phone-next" disabled>Lanjut ke Tes</button>
       </footer>
     </section>
 

@@ -104,7 +104,7 @@ a { color: var(--c-primary-strong); }
 .logo-text { font-weight: 800; font-size: 17px; letter-spacing: -0.2px; }
 
 .screen-header {
-  display: flex; align-items: center; gap: 4px;
+  display: flex; align-items: center; gap: 8px;
   padding: 16px var(--gutter) 14px;
 }
 .screen-header.has-divider { border-bottom: 1px solid var(--c-divider); }
@@ -209,10 +209,11 @@ a { color: var(--c-primary-strong); }
 }
 
 .option {
-  display: flex; align-items: center; gap: 12px; padding: 12px 14px;
-  border: 1px solid var(--c-border); border-radius: var(--r-lg); background: var(--c-bg);
+  display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 14px;
+  border: 1px solid var(--c-border); border-radius: var(--r-md); background: var(--c-bg);
+  font-size: 14px; font-weight: 600;
 }
-.option input { accent-color: var(--c-primary); }
+.option input { width: 18px; height: 18px; margin: 0; accent-color: var(--c-primary); }
 .option:has(input:checked) { border: 1.5px solid var(--c-primary); background: #F5F8FF; }
 
 /* ---------- Kartu, panel, banner, pill ---------- */
@@ -287,6 +288,47 @@ a { color: var(--c-primary-strong); }
   display: flex; gap: 10px; font-size: 14px; line-height: 1.45; color: var(--c-ink-3);
 }
 .checklist-item svg { flex: none; margin-top: 1px; color: var(--c-primary); }
+
+/* ---------- Data HP ---------- */
+
+.form-body { gap: 22px; padding: var(--gutter); }
+.form { display: flex; flex-direction: column; gap: 18px; }
+.optional { font-weight: 500; color: var(--c-muted); }
+
+.select-wrap { position: relative; }
+.select-chevron {
+  position: absolute; right: 14px; top: 15px; color: var(--c-muted); pointer-events: none;
+}
+.select:invalid { color: var(--c-disabled); }
+.select option { color: var(--c-ink); }
+
+.chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; }
+.chip svg { display: none; }
+.chip[aria-pressed="true"] svg { display: block; }
+
+.option-list { display: flex; flex-direction: column; gap: 8px; }
+
+.detected { display: flex; flex-direction: column; gap: 12px; }
+.detected-head { display: flex; align-items: center; justify-content: space-between; }
+.detected-title { font-size: 14px; font-weight: 700; }
+.detected-source { font-size: 12px; font-weight: 600; color: var(--c-primary-strong); }
+.detected-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 14px; }
+.detected-grid > div { display: flex; flex-direction: column; gap: 2px; }
+.detected-label { font-size: 12px; color: var(--c-muted); }
+.detected-value { font-size: 14px; font-weight: 600; }
+.detected-value.mono { font-family: var(--font-mono); }
+
+/* ---------- Izin dibutuhkan ---------- */
+
+.permission-body { align-items: flex-start; gap: 14px; padding: 32px var(--gutter) 0; }
+.permission-icon {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--c-primary-tint); color: var(--c-primary);
+  display: flex; align-items: center; justify-content: center;
+}
+.steps { margin: 6px 0 0; padding-left: 22px; display: flex; flex-direction: column; gap: 10px; font-size: 15px; line-height: 1.45; color: var(--c-ink-3); }
+.steps li::marker { font-weight: 700; color: var(--c-primary-strong); }
 
 /* ---------- Placeholder M1 (hapus saat layar asli dibuat) ---------- */
 

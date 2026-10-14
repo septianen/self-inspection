@@ -3,6 +3,10 @@
 // Untuk yang terbiasa Android: anggap setiap <section data-screen="..."> sebagai
 // satu "Fragment", dan showScreen() sebagai FragmentManager yang menampilkan satu per satu.
 
+import { detectDevice, formatDevice, isAndroidChrome } from './device.js';
+import { initPhoneForm, fillPhone, isPhoneValid } from './phone-form.js';
+import { requestMediaPermissions, keepScreenOn, allowScreenOff } from './util.js';
+
 const STORAGE_KEY = 'selfInspection.session.v1';
 const TEST_COUNT = 6;
 
@@ -11,7 +15,8 @@ const TEST_COUNT = 6;
 // Satu objek state untuk seluruh inspeksi. Disimpan ke sessionStorage setiap berubah,
 // supaya refresh halaman tidak menghilangkan progres (sessionStorage hilang saat tab ditutup).
 const state = {
-  screen: 'home',   // 'home' | 'data' | 'test-1'..'test-6' | 'summary' | 'ready'
+  screen: 'home',   // 'home' | 'permission' | 'data' | 'test-1'..'test-6' | 'summary' | 'ready'
+  permissions: { camera: true, mic: true }, // false = ditolak; tes terkait otomatis dilewati (M4)
   phone: null,      // diisi form Data HP (M2)
   device: null,     // hasil deteksi perangkat (M2)
   results: {},      // hasil tes per key (M3-M5)
@@ -43,6 +48,7 @@ function clearState() {
 
 function resetState() {
   state.screen = 'home';
+  state.permissions = { camera: true, mic: true };
   state.phone = null;
   state.device = null;
   state.results = {};
@@ -63,7 +69,7 @@ function testNumber(name) {
 }
 
 function isValidScreen(name) {
-  if (['home', 'data', 'summary', 'ready'].includes(name)) return true;
+  if (['home', 'permission', 'data', 'summary', 'ready'].includes(name)) return true;
   const n = testNumber(name);
   return name.startsWith('test-') && n >= 1 && n <= TEST_COUNT;
 }
@@ -90,6 +96,11 @@ function render(name) {
 
   if (section === 'test') renderTestPlaceholder(testNumber(name));
   if (section === 'home') renderHome();
+  if (section === 'data') renderData();
+
+  // Layar tetap menyala selama inspeksi berlangsung (bukan di Beranda / Laporan siap).
+  if (section === 'home' || section === 'ready') allowScreenOff();
+  else keepScreenOn();
 
   // Aksesibilitas: scroll ke atas dan pindahkan fokus ke judul layar.
   window.scrollTo(0, 0);
@@ -127,12 +138,6 @@ function goBack() {
 
 // ---------- Beranda ----------
 
-// Android + Chrome? Versi sederhana untuk M1; deteksi lengkap ada di device.js (M2).
-function isAndroidChrome() {
-  const ua = navigator.userAgent;
-  return /Android/.test(ua) && /Chrome\//.test(ua) && !/(EdgA|OPR|SamsungBrowser)\//.test(ua);
-}
-
 // Ada sesi tersimpan yang sudah melewati Beranda?
 function hasSavedProgress() {
   return state.phone !== null || Object.keys(state.results).length > 0 || state.report !== null ||
@@ -145,6 +150,38 @@ function renderHome() {
   document.getElementById('btn-restart').hidden = !resume;
   document.getElementById('device-warning').hidden = isAndroidChrome();
 }
+
+// ---------- Data HP ----------
+
+const nextBtn = document.getElementById('btn-phone-next');
+
+function renderData() {
+  fillPhone(state.phone);
+  nextBtn.disabled = !(state.phone && isPhoneValid(state.phone));
+
+  // Tampilkan hasil deteksi sebelumnya (jika ada), lalu perbarui (mis. level baterai).
+  if (state.device) showDevice(state.device);
+  detectDevice().then((info) => {
+    state.device = info;
+    saveState();
+    showDevice(info);
+  });
+}
+
+function showDevice(info) {
+  const text = formatDevice(info);
+  document.querySelectorAll('[data-device]').forEach((el) => {
+    el.textContent = text[el.dataset.device];
+  });
+}
+
+initPhoneForm((phone) => {
+  state.phone = phone;
+  saveState();
+  nextBtn.disabled = !isPhoneValid(phone);
+});
+
+nextBtn.addEventListener('click', () => showScreen('test-1'));
 
 // ---------- Placeholder tes (M1) ----------
 
@@ -166,18 +203,43 @@ function nextTest() {
 
 // ---------- Event ----------
 
-document.getElementById('btn-start').addEventListener('click', () => {
-  // Lanjutkan: ke layar terakhir yang tersimpan. Mulai baru: ke Data HP
-  // (M2 menambahkan permintaan izin kamera/mikrofon di sini).
-  const resumeTo = hasSavedProgress() && isValidScreen(state.screen) && state.screen !== 'home'
-    ? state.screen
-    : 'data';
-  showScreen(resumeTo);
+const startBtn = document.getElementById('btn-start');
+
+startBtn.addEventListener('click', async () => {
+  // Lanjutkan sesi: langsung ke layar terakhir, izin sudah pernah diminta.
+  if (hasSavedProgress() && isValidScreen(state.screen) && state.screen !== 'home') {
+    showScreen(state.screen);
+    return;
+  }
+  await requestPermissionsThenContinue(startBtn);
 });
 
-document.getElementById('btn-restart').addEventListener('click', () => {
+// Minta izin kamera & mikrofon (dialog Chrome). Ditolak -> layar "Izin dibutuhkan".
+async function requestPermissionsThenContinue(button) {
+  button.disabled = true;
+  keepScreenOn(); // dimulai dari gestur klik
+  try {
+    state.permissions = await requestMediaPermissions();
+  } finally {
+    button.disabled = false;
+  }
+  saveState();
+  const allGranted = state.permissions.camera && state.permissions.mic;
+  showScreen(allGranted ? 'data' : 'permission');
+}
+
+document.getElementById('btn-restart').addEventListener('click', (event) => {
   resetState();
   clearState();
+  requestPermissionsThenContinue(event.currentTarget);
+});
+
+document.getElementById('btn-permission-retry').addEventListener('click', (event) => {
+  requestPermissionsThenContinue(event.currentTarget);
+});
+
+// Lanjut tanpa izin: tes kamera dan mikrofon yang ditolak otomatis berstatus "skipped" (M4).
+document.getElementById('btn-permission-skip').addEventListener('click', () => {
   showScreen('data');
 });
 
