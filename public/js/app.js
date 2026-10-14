@@ -10,7 +10,11 @@ import * as colorTest from './tests/color.js';
 import * as cameraTest from './tests/camera.js';
 import * as speakerTest from './tests/speaker.js';
 import * as micTest from './tests/mic.js';
-import { requestMediaPermissions, keepScreenOn, allowScreenOff } from './util.js';
+import { renderSummary, renderReady } from './screen-result.js';
+import { PUBLIC_BASE_URL, TEST_KEYS, buildDetail, buildAdText } from './report-text.js';
+import {
+  requestMediaPermissions, keepScreenOn, allowScreenOff, exitFullscreen, copyText, showToast,
+} from './util.js';
 
 const STORAGE_KEY = 'selfInspection.session.v1';
 const TEST_COUNT = 6;
@@ -25,7 +29,9 @@ const state = {
   phone: null,      // diisi form Data HP (M2)
   device: null,     // hasil deteksi perangkat (M2)
   results: {},      // hasil tes per key (M3-M5)
-  report: null,     // { id, url, adText } setelah laporan dibuat (M6)
+  report: null,     // { id, url, adText } setelah laporan dibuat
+  retest: null,     // nomor tes (1-6) yang diulang dari Ringkasan; setelah selesai kembali ke Ringkasan
+  editFromSummary: false, // Data HP dibuka lewat "Ubah" di Ringkasan: tombolnya jadi "Simpan"
 };
 
 function saveState() {
@@ -58,6 +64,8 @@ function resetState() {
   state.device = null;
   state.results = {};
   state.report = null;
+  state.retest = null;
+  state.editFromSummary = false;
 }
 
 // ---------- Navigasi ----------
@@ -102,9 +110,17 @@ function render(name) {
 
   // Tes yang sedang berjalan dihentikan setiap pindah layar (mis. tombol back browser).
   stopActiveTest();
+  if (section !== 'test') {
+    state.retest = null;
+    exitFullscreen(); // tes sentuh membiarkan fullscreen menyala untuk tes warna; keluar di sini
+  }
+  if (section !== 'data') state.editFromSummary = false;
+
   if (section === 'test') startTest(testNumber(name));
   if (section === 'home') renderHome();
   if (section === 'data') renderData();
+  if (section === 'summary') renderSummary(state.phone, state.results, retestFromSummary);
+  if (section === 'ready') renderReady(state.report);
 
   // Layar tetap menyala selama inspeksi berlangsung (bukan di Beranda / Laporan siap).
   if (section === 'home' || section === 'ready') allowScreenOff();
@@ -122,7 +138,9 @@ let arrivedByBack = false;
 
 // Tombol back Android / Chrome memicu 'popstate' dengan state entri riwayat sebelumnya.
 window.addEventListener('popstate', (event) => {
-  const name = event.state && event.state.screen;
+  let name = event.state && event.state.screen;
+  // Entri 'ready' tanpa laporan (setelah "Inspeksi HP lain") tidak berarti apa-apa: ke Beranda.
+  if (name === 'ready' && !state.report) name = null;
 
   // Setelah laporan dibuat, tombol Kembali tidak tersedia: tetap di layar "ready".
   if (state.screen === 'ready' && name !== 'ready') {
@@ -169,6 +187,7 @@ const nextBtn = document.getElementById('btn-phone-next');
 
 function renderData() {
   fillPhone(state.phone);
+  nextBtn.textContent = state.editFromSummary ? 'Simpan' : 'Lanjut ke Tes';
   nextBtn.disabled = !(state.phone && isPhoneValid(state.phone));
 
   // Tampilkan hasil deteksi sebelumnya (jika ada), lalu perbarui (mis. level baterai).
@@ -193,7 +212,36 @@ initPhoneForm((phone) => {
   nextBtn.disabled = !isPhoneValid(phone);
 });
 
-nextBtn.addEventListener('click', () => showScreen('test-1'));
+nextBtn.addEventListener('click', () => {
+  if (state.editFromSummary) {
+    state.editFromSummary = false;
+    returnToSummary();
+  } else {
+    showScreen('test-1'); // juga memulai fullscreen tes sentuh (harus dari gestur ini)
+  }
+});
+
+// ---------- Kembali ke Ringkasan (setelah ulangi tes / ubah data) ----------
+
+// true jika entri Ringkasan masih ada tepat di belakang layar ini di riwayat browser.
+// Tidak disimpan di sessionStorage: setelah refresh kita tidak bisa yakin, jadi pakai replace.
+let summaryInHistory = false;
+
+function returnToSummary() {
+  if (summaryInHistory) {
+    summaryInHistory = false;
+    goBack();
+  } else {
+    showScreen('summary', { push: false });
+  }
+}
+
+// Ikon ulangi di Ringkasan: jalankan hanya tes itu, lalu kembali ke Ringkasan.
+function retestFromSummary(n) {
+  summaryInHistory = true;
+  state.retest = n;
+  showScreen(`test-${n}`); // dari gestur klik, jadi fullscreen diizinkan
+}
 
 // ---------- Menjalankan tes ----------
 
@@ -240,6 +288,12 @@ function startTest(n) {
       if (controller.signal.aborted) return;
       state.results[def.key] = result;
       saveState();
+      // Diulang dari Ringkasan: kembali ke sana, bukan lanjut ke tes berikutnya.
+      if (state.retest === n) {
+        state.retest = null;
+        returnToSummary();
+        return;
+      }
       // Tes yang dilewati otomatis karena izin ditolak tidak boleh menjebak pengguna:
       // jika layar ini dicapai dengan tombol back, lanjutkan mundur.
       if (result.status === 'skipped' && result.data.reason === 'no_permission' && arrivedByBack) {
@@ -295,6 +349,90 @@ document.getElementById('btn-permission-retry').addEventListener('click', (event
 // Lanjut tanpa izin: tes kamera dan mikrofon yang ditolak otomatis berstatus "skipped" (M4).
 document.getElementById('btn-permission-skip').addEventListener('click', () => {
   showScreen('data');
+});
+
+// ---------- Ringkasan & Laporan siap ----------
+
+document.getElementById('btn-edit-phone').addEventListener('click', () => {
+  summaryInHistory = true;
+  state.editFromSummary = true;
+  showScreen('data');
+});
+
+// Susun payload sesuai docs/API.md.
+function buildPayload() {
+  const tests = {};
+  TEST_KEYS.forEach((key) => {
+    const r = state.results[key] || { status: 'skipped', data: {} };
+    tests[key] = { status: r.status, detail: buildDetail(key, r), data: r.data };
+  });
+  const d = state.device || {};
+  return {
+    phone: state.phone,
+    device: {
+      os: d.os || null, browser: d.browser || null, modelCode: d.modelCode || null,
+      screen: d.screen || null, ramGb: d.ramGb ?? null, cpuCores: d.cpuCores ?? null,
+      batteryPct: d.batteryPct ?? null,
+    },
+    tests,
+    adText: buildAdText(state.phone, state.results), // masih berisi {ID}
+  };
+}
+
+// SEMENTARA (M5): ID dibuat di browser, belum ada server. M6 menggantinya dengan
+// POST /api/reports yang mengembalikan { id, url, adText } dari server.
+async function createReport(payload) {
+  await new Promise((resolve) => setTimeout(resolve, 600));
+  const alphabet = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
+  let id = '';
+  for (let i = 0; i < 6; i++) id += alphabet[Math.floor(Math.random() * alphabet.length)];
+  return { id, url: `${PUBLIC_BASE_URL}/r/${id}`, adText: payload.adText.replaceAll('{ID}', id) };
+}
+
+const createBtn = document.getElementById('btn-create-report');
+
+createBtn.addEventListener('click', async () => {
+  if (!state.phone) {
+    showToast('Data HP belum diisi.');
+    return;
+  }
+  createBtn.disabled = true;
+  const spinner = document.createElement('span');
+  spinner.className = 'spinner is-light';
+  createBtn.replaceChildren(spinner, 'Membuat laporan…');
+  try {
+    state.report = await createReport(buildPayload());
+    saveState();
+    showScreen('ready');
+  } catch (error) {
+    showToast('Gagal membuat laporan. Periksa koneksi, lalu coba lagi.');
+  } finally {
+    createBtn.disabled = false;
+    createBtn.textContent = 'Buat Laporan';
+  }
+});
+
+document.getElementById('btn-copy-link').addEventListener('click', async () => {
+  const ok = await copyText(state.report.url);
+  showToast(ok ? 'Link disalin' : 'Gagal menyalin');
+});
+
+document.getElementById('btn-copy-ad').addEventListener('click', async () => {
+  const ok = await copyText(state.report.adText);
+  showToast(ok ? 'Teks disalin' : 'Gagal menyalin');
+});
+
+// Web Share API membuka lembar bagikan Android. Jika tidak ada, salin link saja.
+document.getElementById('btn-share').addEventListener('click', async () => {
+  const { url } = state.report;
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: 'Laporan inspeksi HP', url });
+    } catch (e) { /* pengguna menutup lembar bagikan */ }
+    return;
+  }
+  const ok = await copyText(url);
+  showToast(ok ? 'Link disalin' : 'Gagal menyalin');
 });
 
 document.getElementById('btn-new').addEventListener('click', () => {

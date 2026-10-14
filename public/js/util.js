@@ -83,3 +83,36 @@ export async function exitFullscreen() {
     await document.exitFullscreen();
   } catch (e) { /* abaikan */ }
 }
+
+// ---------- Clipboard & toast ----------
+
+// Menyalin teks. navigator.clipboard hanya ada di HTTPS/localhost; fallback ke execCommand.
+export async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch (e) {
+    const area = document.createElement('textarea');
+    area.value = text;
+    area.setAttribute('readonly', '');
+    area.style.position = 'fixed';
+    area.style.opacity = '0';
+    document.body.appendChild(area);
+    area.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (err) { /* abaikan */ }
+    area.remove();
+    return ok;
+  }
+}
+
+let toastTimer = null;
+
+// Pill gelap di bawah layar, hilang setelah 2 detik.
+export function showToast(message) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { toast.hidden = true; }, 2000);
+}

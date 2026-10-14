@@ -432,6 +432,7 @@ a { color: var(--c-primary-strong); }
   animation: spin 800ms linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+.spinner.is-light { border-color: rgba(255, 255, 255, 0.4); border-top-color: #fff; }
 
 .banner-text { display: flex; flex-direction: column; gap: 2px; }
 .banner-sub { font-size: 13px; color: var(--c-ink-3); }
@@ -479,6 +480,67 @@ a { color: var(--c-primary-strong); }
 .level-bar { flex: 1; height: 0; min-height: 4px; border-radius: 2px; background: var(--c-primary-light); }
 .level-bar.is-high { background: var(--c-primary); }
 .mic-status { display: flex; flex-direction: column; gap: 22px; }
+
+/* ---------- Ringkasan ---------- */
+
+.summary-body { gap: 18px; padding: 18px var(--gutter) 0; }
+.phone-row { display: flex; align-items: center; gap: 14px; }
+.phone-icon {
+  width: 46px; height: 46px; flex: none; border-radius: var(--r-lg);
+  background: var(--c-primary-tint); color: var(--c-primary);
+  display: flex; align-items: center; justify-content: center;
+}
+.phone-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.phone-name { font-size: 16px; font-weight: 800; overflow-wrap: anywhere; }
+.phone-row .btn-text { margin-left: auto; font-size: 14px; }
+.count-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.result-list { display: flex; flex-direction: column; overflow: hidden; }
+.result-row { display: flex; align-items: center; gap: 10px; padding: 12px 8px 12px 14px; }
+.result-row + .result-row { border-top: 1px solid var(--c-divider); }
+.result-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.result-name { font-size: 15px; font-weight: 700; }
+.result-detail { font-size: 13px; color: var(--c-muted); }
+.retest-btn {
+  width: 36px; height: 36px; flex: none; border: 0; border-radius: var(--r-sm);
+  background: transparent; color: var(--c-primary-strong);
+  display: flex; align-items: center; justify-content: center;
+}
+.result-row .pill { flex: none; }
+
+/* ---------- Laporan siap ---------- */
+
+.ready-body { gap: 20px; padding: 36px var(--gutter) 0; }
+.ready-hero { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+.ready-hero .screen-title { margin-top: 6px; }
+.ready-hero .lead { line-height: 1.5; }
+.ready-check {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--c-primary); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 0 8px var(--c-primary-ring);
+}
+.link-box {
+  display: flex; align-items: center; gap: 10px; padding: 6px 6px 6px 14px;
+  border: 1px solid var(--c-border); border-radius: var(--r-lg); color: var(--c-muted);
+}
+.link-box svg { flex: none; }
+.link-text {
+  flex: 1; min-width: 0; font-family: var(--font-mono); font-size: 14px; font-weight: 600;
+  color: var(--c-ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.btn-copy {
+  height: 44px; padding: 0 14px; border: 0; border-radius: var(--r-sm);
+  background: var(--c-primary-soft); color: var(--c-primary-ink); font-size: 13px; font-weight: 700;
+}
+.ad-section { display: flex; flex-direction: column; gap: 10px; }
+.ad-title { font-size: 14px; font-weight: 700; }
+.ad-text {
+  padding: 14px 16px; border-radius: var(--r-lg);
+  background: var(--c-bg-page); border: 1px solid var(--c-track);
+  font-size: 13.5px; line-height: 1.6; color: var(--c-ink-2); white-space: pre-line;
+}
+a.btn-secondary { text-decoration: none; }
 
 /* ---------- Placeholder M1 (hapus saat layar asli dibuat) ---------- */
 
