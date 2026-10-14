@@ -57,3 +57,29 @@ export function allowScreenOff() {
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible' && wantWakeLock && !wakeLock) acquireWakeLock();
 });
+
+// ---------- Fullscreen ----------
+
+export function isFullscreen() {
+  return Boolean(document.fullscreenElement);
+}
+
+// requestFullscreen hanya diizinkan Chrome jika dipanggil tak lama setelah gestur pengguna
+// (tap/klik). Panggil ini langsung dari handler tap, sebelum `await` apa pun.
+// Jika ditolak atau tidak didukung, tes tetap jalan karena layarnya sudah position: fixed
+// menutupi seluruh viewport (hanya address bar yang tetap terlihat).
+export async function enterFullscreen() {
+  try {
+    await document.documentElement.requestFullscreen({ navigationUI: 'hide' });
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+export async function exitFullscreen() {
+  if (!document.fullscreenElement) return;
+  try {
+    await document.exitFullscreen();
+  } catch (e) { /* abaikan */ }
+}

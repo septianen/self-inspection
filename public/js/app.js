@@ -5,6 +5,9 @@
 
 import { detectDevice, formatDevice, isAndroidChrome } from './device.js';
 import { initPhoneForm, fillPhone, isPhoneValid } from './phone-form.js';
+import * as touchTest from './tests/touch.js';
+import * as colorTest from './tests/color.js';
+import * as placeholderTest from './tests/placeholder.js';
 import { requestMediaPermissions, keepScreenOn, allowScreenOff } from './util.js';
 
 const STORAGE_KEY = 'selfInspection.session.v1';
@@ -94,7 +97,9 @@ function render(name) {
   const section = sectionNameFor(name);
   screens.forEach((el) => el.classList.toggle('is-active', el.dataset.screen === section));
 
-  if (section === 'test') renderTestPlaceholder(testNumber(name));
+  // Tes yang sedang berjalan dihentikan setiap pindah layar (mis. tombol back browser).
+  stopActiveTest();
+  if (section === 'test') startTest(testNumber(name));
   if (section === 'home') renderHome();
   if (section === 'data') renderData();
 
@@ -183,22 +188,55 @@ initPhoneForm((phone) => {
 
 nextBtn.addEventListener('click', () => showScreen('test-1'));
 
-// ---------- Placeholder tes (M1) ----------
+// ---------- Menjalankan tes ----------
 
-const TEST_NAMES = ['Layar sentuh', 'Warna layar', 'Kamera belakang', 'Kamera depan', 'Speaker', 'Mikrofon'];
+// Urutan tes. Tes 3-6 masih placeholder (M4).
+const TESTS = [
+  { key: 'touch', module: touchTest },
+  { key: 'color', module: colorTest },
+  { key: 'cameraBack', module: placeholderTest, facing: 'environment' },
+  { key: 'cameraFront', module: placeholderTest, facing: 'user' },
+  { key: 'speaker', module: placeholderTest },
+  { key: 'mic', module: placeholderTest },
+];
 
-function renderTestPlaceholder(n) {
-  document.getElementById('test-step').textContent = `Tes ${n} dari ${TEST_COUNT}`;
-  document.getElementById('test-title').textContent = TEST_NAMES[n - 1];
-  document.querySelectorAll('#test-progress > span').forEach((seg, i) => {
-    seg.classList.toggle('is-done', i + 1 <= n);
-  });
+const testRoot = document.getElementById('test-root');
+let activeController = null; // AbortController tes yang sedang berjalan
+
+// Membatalkan tes aktif. Modul tes mendengarkan `ctx.signal` lalu membersihkan dirinya
+// (menutup fullscreen, melepas listener, dll.).
+function stopActiveTest() {
+  if (activeController) {
+    activeController.abort();
+    activeController = null;
+  }
 }
 
-function nextTest() {
-  const name = state.screen;
-  const n = testNumber(name);
-  showScreen(n < TEST_COUNT ? `test-${n + 1}` : 'summary');
+// Kontrak modul tes (docs/TESTS.md): run(container, ctx) -> Promise<{status, data}>.
+// - Tombol Lewati me-resolve { status: 'skipped' }.
+// - Tombol Kembali me-reject Error('back'), lalu kita jalankan history.back().
+// PENTING: startTest dipanggil langsung dari handler klik (lewat showScreen) tanpa await,
+// karena tes sentuh meminta fullscreen dan itu hanya boleh dari gestur pengguna.
+function startTest(n) {
+  const def = TESTS[n - 1];
+  const controller = new AbortController();
+  activeController = controller;
+
+  testRoot.replaceChildren();
+  const ctx = { index: n, total: TEST_COUNT, facing: def.facing, signal: controller.signal };
+
+  def.module.run(testRoot, ctx)
+    .then((result) => {
+      if (controller.signal.aborted) return;
+      state.results[def.key] = result;
+      saveState();
+      showScreen(n < TEST_COUNT ? `test-${n + 1}` : 'summary');
+    })
+    .catch((error) => {
+      if (controller.signal.aborted) return;
+      if (error.message === 'back') goBack();
+      else console.error(`Tes ${def.key} gagal:`, error);
+    });
 }
 
 // ---------- Event ----------
@@ -256,7 +294,6 @@ document.addEventListener('click', (event) => {
 
   if (target.dataset.goto) showScreen(target.dataset.goto);
   else if (target.dataset.action === 'back') goBack();
-  else if (target.dataset.action === 'skip' || target.dataset.action === 'next-test') nextTest();
 });
 
 // ---------- Mulai ----------
