@@ -116,3 +116,28 @@ export function showToast(message) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => { toast.hidden = true; }, 2000);
 }
+
+// ---------- Tinggi viewport ----------
+
+// Menyimpan tinggi area yang benar-benar terlihat ke CSS variable `--app-height`.
+// Di Chrome Android, `100vh`/`100dvh` bisa lebih tinggi dari area yang tampak (address bar,
+// bar navigasi, transisi fullscreen), sehingga bagian bawah layar tertutup. window.innerHeight
+// dan visualViewport.height selalu sesuai area yang terlihat.
+export function trackViewportHeight() {
+  const root = document.documentElement;
+  const update = () => {
+    const vv = window.visualViewport;
+    const height = vv ? Math.min(vv.height, window.innerHeight) : window.innerHeight;
+    root.style.setProperty('--app-height', `${Math.round(height)}px`);
+  };
+  update();
+  window.addEventListener('resize', update);
+  window.addEventListener('orientationchange', update);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', update);
+  // Masuk/keluar fullscreen mengubah ukuran dengan animasi: hitung ulang setelah selesai.
+  document.addEventListener('fullscreenchange', () => {
+    update();
+    setTimeout(update, 150);
+    setTimeout(update, 500);
+  });
+}

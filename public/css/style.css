@@ -345,7 +345,8 @@ a { color: var(--c-primary-strong); }
 
 /* Layar penuh. position: fixed, jadi tetap menutupi viewport walau fullscreen API ditolak. */
 .fullscreen-layer {
-  position: fixed; inset: 0; height: 100dvh; z-index: 50;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  height: var(--app-height, 100dvh); /* diisi util.js: tinggi area yang benar-benar terlihat */
   background: var(--c-bg); touch-action: none; user-select: none; -webkit-user-select: none;
 }
 

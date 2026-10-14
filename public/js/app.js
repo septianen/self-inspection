@@ -14,6 +14,7 @@ import { renderSummary, renderReady } from './screen-result.js';
 import { TEST_KEYS, buildDetail, buildAdText } from './report-text.js';
 import {
   requestMediaPermissions, keepScreenOn, allowScreenOff, exitFullscreen, copyText, showToast,
+  trackViewportHeight,
 } from './util.js';
 
 const STORAGE_KEY = 'selfInspection.session.v1';
@@ -460,6 +461,7 @@ document.addEventListener('click', (event) => {
 // ---------- Mulai ----------
 
 function init() {
+  trackViewportHeight();
   const saved = loadState();
   if (saved) Object.assign(state, saved);
 
