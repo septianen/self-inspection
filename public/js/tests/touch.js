@@ -62,7 +62,7 @@ export function run(container, ctx) {
     // Panel debug sementara: buka halaman dengan ?debug di URL untuk melihat ukuran layar.
     if (new URLSearchParams(location.search).has('debug')) {
       const box = document.createElement('pre');
-      box.style.cssText = 'position:absolute;left:8px;top:70px;margin:0;padding:6px 8px;' +
+      box.style.cssText = 'position:absolute;left:8px;top:40%;margin:0;padding:6px 8px;' +
         'background:rgba(0,0,0,.75);color:#0f0;font:11px/1.35 monospace;pointer-events:none;z-index:5';
       root.appendChild(box);
       const dump = () => {
@@ -77,7 +77,6 @@ export function run(container, ctx) {
           `layer ${Math.round(r.top)}..${Math.round(r.bottom)} h${Math.round(r.height)}`,
           `grid ${Math.round(g.top)}..${Math.round(g.bottom)}`,
           `btn ${Math.round(b.top)}..${Math.round(b.bottom)}`,
-          `appH ${getComputedStyle(document.documentElement).getPropertyValue('--app-height')}`,
           `fs ${isFullscreen()} docH ${document.documentElement.clientHeight}`,
         ].join('\n');
       };

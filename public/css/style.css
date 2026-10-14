@@ -345,8 +345,9 @@ a { color: var(--c-primary-strong); }
 
 /* Layar penuh. position: fixed, jadi tetap menutupi viewport walau fullscreen API ditolak. */
 .fullscreen-layer {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
-  height: var(--app-height, 100dvh); /* diisi util.js: tinggi area yang benar-benar terlihat */
+  /* inset: 0 (bukan height: 100vh/100dvh) agar layer selalu pas dengan area yang terlihat
+     di Chrome Android, walau address bar atau bar sistem muncul/hilang. */
+  position: fixed; inset: 0; z-index: 50;
   background: var(--c-bg); touch-action: none; user-select: none; -webkit-user-select: none;
 }
 
