@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Tes speaker</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=IBM+Plex+Mono:wght@500;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2457D6}a:hover{color:#173E9E}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #FFFFFF; color: #0B1F3A; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; display: flex; flex-direction: column">
+  <header style="display: flex; flex-direction: column; gap: 12px; padding: 16px 20px 14px">
+    <div style="display: flex; align-items: center; justify-content: space-between">
+      <button type="button" aria-label="Kembali" style="width: 40px; height: 40px; margin-left: -8px; border: 0; background: transparent; color: #0B1F3A; display: flex; align-items: center; justify-content: center; cursor: pointer">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+      </button>
+      <span style="font-size: 13px; font-weight: 700; color: #5B6B82">Tes 5 dari 6</span>
+      <button type="button" style="height: 40px; padding: 0 4px; border: 0; background: transparent; color: #2457D6; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer">Lewati</button>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px">
+      <div style="height: 4px; border-radius: 2px; background: #3A77FF"></div>
+      <div style="height: 4px; border-radius: 2px; background: #3A77FF"></div>
+      <div style="height: 4px; border-radius: 2px; background: #3A77FF"></div>
+      <div style="height: 4px; border-radius: 2px; background: #3A77FF"></div>
+      <div style="height: 4px; border-radius: 2px; background: #3A77FF"></div>
+      <div style="height: 4px; border-radius: 2px; background: #E1E7F0"></div>
+    </div>
+  </header>
+
+  <main style="flex: 1; display: flex; flex-direction: column; gap: 26px; padding: 4px 20px 0">
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <h1 style="margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.4px">Speaker</h1>
+      <p style="margin: 0; font-size: 15px; line-height: 1.55; color: #4A5A72">Naikkan volume, putar suara, lalu ketik 3 angka yang kamu dengar.</p>
+    </div>
+
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 26px 16px; border-radius: 16px; background: #F2F6FF">
+      <button type="button" aria-label="Putar suara lagi" style="width: 96px; height: 96px; border: 0; border-radius: 50%; background: #3A77FF; color: #FFFFFF; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 10px #DCE7FF; cursor: pointer">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"></path><path d="M16.5 8.5a5 5 0 010 7"></path><path d="M19 6a8.5 8.5 0 010 12"></path></svg>
+      </button>
+      <span style="font-size: 14px; font-weight: 700; color: #1F4FC4">Putar lagi</span>
+      <span style="font-size: 13px; color: #5B6B82">Sudah diputar 1 kali</span>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <span style="font-size: 14px; font-weight: 700">Angka yang kamu dengar</span>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px">
+        <input type="text" inputmode="numeric" maxlength="1" value="4" aria-label="Angka pertama" style="height: 72px; box-sizing: border-box; border: 1.5px solid #C9D2DF; border-radius: 12px; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 32px; font-weight: 600; color: #0B1F3A">
+        <input type="text" inputmode="numeric" maxlength="1" value="7" aria-label="Angka kedua" style="height: 72px; box-sizing: border-box; border: 1.5px solid #C9D2DF; border-radius: 12px; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 32px; font-weight: 600; color: #0B1F3A">
+        <input type="text" inputmode="numeric" maxlength="1" value="2" aria-label="Angka ketiga" style="height: 72px; box-sizing: border-box; border: 2px solid #3A77FF; border-radius: 12px; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 32px; font-weight: 600; color: #0B1F3A">
+      </div>
+      <span style="font-size: 13px; color: #5B6B82">Kesempatan 1 dari 2</span>
+    </div>
+  </main>
+
+  <footer style="display: flex; flex-direction: column; gap: 10px; padding: 14px 20px 28px">
+    <button type="button" style="height: 52px; border: 0; border-radius: 12px; background: #3A77FF; color: #FFFFFF; font: inherit; font-size: 16px; font-weight: 700; cursor: pointer">Cek Jawaban</button>
+    <button type="button" style="height: 40px; border: 0; background: transparent; color: #2457D6; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer">Tidak terdengar suara apa pun</button>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

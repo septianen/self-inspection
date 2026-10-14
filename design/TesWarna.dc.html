@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Tes warna layar</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=IBM+Plex+Mono:wght@500;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2457D6}a:hover{color:#173E9E}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #FFFFFF; color: #0B1F3A; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; display: flex; flex-direction: column">
+  <header style="display: flex; flex-direction: column; gap: 12px; padding: 16px 20px 14px">
+    <div style="display: flex; align-items: center; justify-content: space-between">
+      <button type="button" aria-label="Kembali" style="width: 40px; height: 40px; margin-left: -8px; border: 0; background: transparent; color: #0B1F3A; display: flex; align-items: center; justify-content: center; cursor: pointer">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+      </button>
+      <span style="font-size: 13px; font-weight: 700; color: #5B6B82">Tes 2 dari 6</span>
+      <button type="button" style="height: 40px; padding: 0 4px; border: 0; background: transparent; color: #2457D6; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer">Lewati</button>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px">
+      <div style="height: 4px; border-radius: 2px; background: #3A77FF"></div>
+      <div style="height: 4px; border-radius: 2px; background: #3A77FF"></div>
+      <div style="height: 4px; border-radius: 2px; background: #E1E7F0"></div>
+      <div style="height: 4px; border-radius: 2px; background: #E1E7F0"></div>
+      <div style="height: 4px; border-radius: 2px; background: #E1E7F0"></div>
+      <div style="height: 4px; border-radius: 2px; background: #E1E7F0"></div>
+    </div>
+  </header>
+
+  <main style="flex: 1; display: flex; flex-direction: column; gap: 22px; padding: 10px 20px 0">
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <h1 style="margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.4px; text-wrap: balance">Warna layar</h1>
+      <p style="margin: 0; font-size: 15px; line-height: 1.55; color: #4A5A72">Kamu sudah melihat 5 warna layar penuh. Apakah ada masalah berikut di salah satunya?</p>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 8px">
+      <div style="flex: 1; height: 44px; border-radius: 8px; background: #FF0000"></div>
+      <div style="flex: 1; height: 44px; border-radius: 8px; background: #00FF00"></div>
+      <div style="flex: 1; height: 44px; border-radius: 8px; background: #0000FF"></div>
+      <div style="flex: 1; height: 44px; border-radius: 8px; background: #FFFFFF; border: 1px solid #C9D2DF; box-sizing: border-box"></div>
+      <div style="flex: 1; height: 44px; border-radius: 8px; background: #000000"></div>
+      <button type="button" aria-label="Lihat warna lagi" style="width: 44px; height: 44px; flex: none; border: 1px solid #C9D2DF; border-radius: 8px; background: #FFFFFF; color: #2457D6; display: flex; align-items: center; justify-content: center; cursor: pointer">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 0113.7-5.6L20 8.5M20 4v4.5h-4.5"></path><path d="M20 12a8 8 0 01-13.7 5.6L4 15.5M4 20v-4.5h4.5"></path></svg>
+      </button>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <label style="display: flex; align-items: flex-start; gap: 12px; padding: 14px; border: 1px solid #C9D2DF; border-radius: 12px"><input type="checkbox" style="width: 20px; height: 20px; accent-color: #3A77FF; margin: 0; flex: none"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 700">Titik mati (dead pixel)</span><span style="font-size: 13px; color: #5B6B82">Titik kecil yang warnanya tidak berubah</span></span></label>
+      <label style="display: flex; align-items: flex-start; gap: 12px; padding: 14px; border: 1px solid #C9D2DF; border-radius: 12px"><input type="checkbox" style="width: 20px; height: 20px; accent-color: #3A77FF; margin: 0; flex: none"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 700">Garis</span><span style="font-size: 13px; color: #5B6B82">Garis tegak atau mendatar di layar</span></span></label>
+      <label style="display: flex; align-items: flex-start; gap: 12px; padding: 14px; border: 1px solid #C9D2DF; border-radius: 12px"><input type="checkbox" style="width: 20px; height: 20px; accent-color: #3A77FF; margin: 0; flex: none"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 700">Bercak atau bayangan</span><span style="font-size: 13px; color: #5B6B82">Noda, burn-in, atau bekas gambar tertinggal</span></span></label>
+      <label style="display: flex; align-items: flex-start; gap: 12px; padding: 14px; border: 1px solid #C9D2DF; border-radius: 12px"><input type="checkbox" style="width: 20px; height: 20px; accent-color: #3A77FF; margin: 0; flex: none"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 700">Warna tidak rata</span><span style="font-size: 13px; color: #5B6B82">Sebagian layar lebih gelap atau kekuningan</span></span></label>
+    </div>
+  </main>
+
+  <footer style="display: flex; flex-direction: column; gap: 10px; padding: 14px 20px 28px">
+    <button type="button" style="height: 52px; border: 0; border-radius: 12px; background: #3A77FF; color: #FFFFFF; font: inherit; font-size: 16px; font-weight: 700; cursor: pointer">Tidak ada masalah</button>
+    <button type="button" style="height: 48px; border: 1px solid #C9D2DF; border-radius: 12px; background: #FFFFFF; color: #8A97A8; font: inherit; font-size: 15px; font-weight: 700; cursor: not-allowed" disabled>Simpan masalah</button>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

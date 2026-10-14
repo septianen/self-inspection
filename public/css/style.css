@@ -1,0 +1,293 @@
+/* Self Inspection: token + komponen. Semua warna lewat custom properties. */
+
+:root {
+  /* Warna dasar */
+  --c-primary: #3A77FF;
+  --c-primary-strong: #2457D6;
+  --c-primary-ink: #1F4FC4;
+  --c-primary-soft: #EAF1FF;
+  --c-primary-tint: #F2F6FF;
+  --c-primary-ring: #DCE7FF;
+  --c-primary-light: #9EC0FF;
+
+  --c-ink: #0B1F3A;
+  --c-ink-2: #22324A;
+  --c-ink-3: #34445C;
+  --c-body: #4A5A72;
+  --c-muted: #5B6B82;
+  --c-disabled: #8A97A8;
+
+  --c-bg: #FFFFFF;
+  --c-bg-page: #F4F7FB;
+  --c-border: #C9D2DF;
+  --c-border-soft: #DDE3EC;
+  --c-divider: #E6EBF2;
+  --c-track: #E1E7F0;
+
+  /* Status */
+  --c-pass: #138A4E;  --c-pass-ink: #0E6B3C;  --c-pass-bg: #E9F7EF;
+  --c-fail: #C25E0A;  --c-fail-ink: #9A4A06;  --c-fail-bg: #FFF1E3;
+  --c-skip-ink: #4A5568;  --c-skip-bg: #EEF1F5;
+
+  /* Tipografi */
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'Roboto Mono', monospace;
+
+  /* Radius */
+  --r-sm: 8px; --r-md: 10px; --r-lg: 12px; --r-xl: 14px; --r-2xl: 16px; --r-pill: 999px;
+
+  /* Spasi */
+  --gutter: 20px;
+}
+
+/* ---------- Dasar ---------- */
+
+* { box-sizing: border-box; }
+
+html { color-scheme: light; }
+
+body {
+  margin: 0;
+  background: var(--c-bg);
+  color: var(--c-ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  -webkit-text-size-adjust: 100%;
+}
+
+h1, h2, h3, p { margin: 0; }
+
+button { font: inherit; color: inherit; cursor: pointer; }
+
+a { color: var(--c-primary-strong); }
+
+:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 2px; }
+
+[hidden] { display: none !important; }
+
+.mono { font-family: var(--font-mono); font-weight: 600; }
+
+/* ---------- Layar ---------- */
+
+/* Aplikasi dibatasi 480px dan diletakkan di tengah pada layar lebar */
+#app { max-width: 480px; margin: 0 auto; }
+
+/* Setiap layar = kolom flex setinggi viewport, sehingga footer menempel di bawah */
+.screen {
+  display: none;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: var(--c-bg);
+}
+.screen.is-active { display: flex; animation: fade-in 150ms ease-out; }
+.screen > main { flex: 1; display: flex; flex-direction: column; }
+.screen h1:focus { outline: none; }
+
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .screen.is-active { animation: none; }
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* ---------- Header ---------- */
+
+.app-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 20px var(--gutter) 8px;
+}
+.logo-mark {
+  width: 34px; height: 34px; border-radius: var(--r-md);
+  background: var(--c-primary); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+}
+.logo-text { font-weight: 800; font-size: 17px; letter-spacing: -0.2px; }
+
+.screen-header {
+  display: flex; align-items: center; gap: 4px;
+  padding: 16px var(--gutter) 14px;
+}
+.screen-header.has-divider { border-bottom: 1px solid var(--c-divider); }
+.screen-header h2 { font-size: 17px; font-weight: 700; }
+
+.icon-btn {
+  width: 40px; height: 40px; flex: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 0; background: transparent; border-radius: var(--r-pill);
+}
+.screen-header .icon-btn { margin-left: -8px; }
+
+/* Header layar tes: kembali | "Tes n dari 6" | Lewati, lalu progress 6 segmen */
+.test-header { padding: 16px var(--gutter) 0; }
+.test-header-row {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+}
+.test-header-row .icon-btn { margin-left: -8px; }
+.test-header-row .btn-text { justify-self: end; }
+.test-step { font-size: 13px; font-weight: 700; color: var(--c-muted); }
+.progress {
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px;
+  margin-top: 10px;
+}
+.progress > span { height: 4px; border-radius: 2px; background: var(--c-track); }
+.progress > span.is-done { background: var(--c-primary); }
+
+/* ---------- Tipografi ---------- */
+
+.eyebrow {
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.2px; color: var(--c-primary-strong);
+}
+.hero-title {
+  font-size: 30px; font-weight: 800; line-height: 1.15;
+  letter-spacing: -0.6px; text-wrap: balance;
+}
+.screen-title { font-size: 24px; font-weight: 800; letter-spacing: -0.4px; }
+.section-title { font-size: 16px; font-weight: 800; }
+.lead { font-size: 15px; line-height: 1.55; color: var(--c-body); }
+.caption { font-size: 12.5px; color: var(--c-muted); }
+
+/* ---------- Tombol ---------- */
+
+.btn-primary, .btn-secondary, .btn-text {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 44px; border-radius: var(--r-lg); font-weight: 700;
+}
+.btn-primary {
+  width: 100%; height: 52px; border: 0;
+  background: var(--c-primary); color: #fff; font-size: 16px;
+}
+.btn-primary:disabled { background: var(--c-track); color: var(--c-disabled); cursor: not-allowed; }
+
+.btn-secondary {
+  width: 100%; height: 48px;
+  border: 1px solid var(--c-border); background: var(--c-bg);
+  color: var(--c-ink); font-size: 15px;
+}
+.btn-secondary:disabled { color: var(--c-disabled); cursor: not-allowed; }
+
+.btn-text {
+  height: 44px; padding: 0 8px; border: 0; background: transparent;
+  color: var(--c-primary-strong); font-size: 14px;
+}
+
+.btn-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* ---------- Footer ---------- */
+
+.screen-footer {
+  display: flex; flex-direction: column; gap: 12px;
+  padding: 16px var(--gutter) calc(28px + env(safe-area-inset-bottom));
+}
+.screen-footer.has-divider { border-top: 1px solid var(--c-divider); }
+.footer-note { display: flex; align-items: center; justify-content: center; gap: 6px; }
+
+/* ---------- Form ---------- */
+
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field-label { font-size: 13px; font-weight: 700; }
+
+.input, .select, .textarea {
+  width: 100%; height: 48px; padding: 0 14px;
+  border: 1px solid var(--c-border); border-radius: var(--r-md);
+  background: var(--c-bg); color: var(--c-ink); font: inherit; font-size: 15px;
+}
+.textarea { height: auto; min-height: 96px; padding: 12px 14px; resize: vertical; }
+.select { appearance: none; padding-right: 40px; }
+.input:focus, .select:focus, .textarea:focus {
+  border-color: var(--c-primary); outline: 2px solid var(--c-primary-soft);
+}
+
+.chip {
+  height: 40px; padding: 0 16px; border-radius: var(--r-pill);
+  border: 1px solid var(--c-border); background: var(--c-bg);
+  font-size: 14px; font-weight: 600;
+}
+.chip[aria-pressed="true"] {
+  border: 1.5px solid var(--c-primary); background: var(--c-primary-soft);
+  color: var(--c-primary-ink); font-weight: 700;
+}
+
+.option {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+  border: 1px solid var(--c-border); border-radius: var(--r-lg); background: var(--c-bg);
+}
+.option input { accent-color: var(--c-primary); }
+.option:has(input:checked) { border: 1.5px solid var(--c-primary); background: #F5F8FF; }
+
+/* ---------- Kartu, panel, banner, pill ---------- */
+
+.card {
+  border: 1px solid var(--c-border-soft); border-radius: var(--r-xl);
+  background: var(--c-bg);
+}
+.panel {
+  background: var(--c-primary-tint); border-radius: var(--r-xl); padding: 16px;
+}
+
+.banner {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 14px; border-radius: var(--r-lg);
+}
+.banner-icon {
+  width: 30px; height: 30px; flex: none; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; color: #fff;
+}
+.banner-title { font-size: 14px; font-weight: 700; }
+.banner.is-pass { background: var(--c-pass-bg); }
+.banner.is-pass .banner-icon { background: var(--c-pass); }
+.banner.is-pass .banner-title { color: var(--c-pass-ink); }
+.banner.is-fail { background: var(--c-fail-bg); }
+.banner.is-fail .banner-icon { background: var(--c-fail); }
+.banner.is-fail .banner-title { color: var(--c-fail-ink); }
+
+/* Banner peringatan sederhana (tanpa ikon bulat), memakai token fail */
+.notice {
+  padding: 12px 14px; border-radius: var(--r-lg);
+  background: var(--c-fail-bg); color: var(--c-fail-ink);
+  font-size: 13.5px; line-height: 1.5; font-weight: 600;
+}
+
+.pill {
+  display: inline-block; padding: 4px 10px; border-radius: var(--r-lg);
+  font-size: 12px; font-weight: 700;
+}
+.pill.is-pass { background: var(--c-pass-bg); color: var(--c-pass-ink); }
+.pill.is-fail { background: var(--c-fail-bg); color: var(--c-fail-ink); }
+.pill.is-skipped { background: var(--c-skip-bg); color: var(--c-skip-ink); }
+.pill-count { padding: 6px 12px; border-radius: var(--r-2xl); font-size: 13px; }
+
+/* ---------- Toast ---------- */
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(110px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  max-width: calc(100% - 40px);
+  padding: 10px 16px; border-radius: var(--r-pill);
+  background: var(--c-ink); color: #fff; font-size: 14px; font-weight: 600;
+  text-align: center; z-index: 100;
+}
+
+/* ---------- Beranda ---------- */
+
+.home-body { gap: 22px; padding: 18px var(--gutter) 0; }
+.home-intro { display: flex; flex-direction: column; gap: 10px; }
+
+.test-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.test-card {
+  display: flex; align-items: center; gap: 10px; padding: 12px;
+  border: 1px solid var(--c-border-soft); border-radius: var(--r-lg);
+  font-size: 14px; font-weight: 600;
+}
+.test-card svg { flex: none; color: var(--c-primary); }
+
+.checklist { display: flex; flex-direction: column; gap: 12px; }
+.checklist-title { font-size: 14px; font-weight: 700; }
+.checklist-item {
+  display: flex; gap: 10px; font-size: 14px; line-height: 1.45; color: var(--c-ink-3);
+}
+.checklist-item svg { flex: none; margin-top: 1px; color: var(--c-primary); }
+
+/* ---------- Placeholder M1 (hapus saat layar asli dibuat) ---------- */
+
+.placeholder-body { gap: 12px; padding: 24px var(--gutter); }

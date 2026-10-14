@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Tes kamera belakang</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=IBM+Plex+Mono:wght@500;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2457D6}a:hover{color:#173E9E}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #FFFFFF; color: #0B1F3A; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; display: flex; flex-direction: column">
+  <header style="display: flex; flex-direction: column; gap: 12px; padding: 16px 20px 14px">
+    <div style="display: flex; align-items: center; justify-content: space-between">
+      <button type="button" aria-label="Kembali" style="width: 40px; height: 40px; margin-left: -8px; border: 0; background: transparent; color: #0B1F3A; display: flex; align-items: center; justify-content: center; cursor: pointer">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+      </button>
+      <span style="font-size: 13px; font-weight: 700; color: #5B6B82">Tes 3 dari 6</span>
+      <button type="button" style="height: 40px; padding: 0 4px; border: 0; background: transparent; color: #2457D6; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer">Lewati</button>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px">
+      <div style="height: 4px; border-radius: 2px; background: #3A77FF"></div>
+      <div style="height: 4px; border-radius: 2px; background: #3A77FF"></div>
+      <div style="height: 4px; border-radius: 2px; background: #3A77FF"></div>
+      <div style="height: 4px; border-radius: 2px; background: #E1E7F0"></div>
+      <div style="height: 4px; border-radius: 2px; background: #E1E7F0"></div>
+      <div style="height: 4px; border-radius: 2px; background: #E1E7F0"></div>
+    </div>
+  </header>
+
+  <main style="flex: 1; display: flex; flex-direction: column; gap: 16px; padding: 4px 20px 0">
+    <h1 style="margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.4px">Kamera belakang</h1>
+
+    <div style="position: relative; height: 330px; border-radius: 16px; overflow: hidden; background: #1A2333">
+      <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 120px; background: #3A3F47"></div>
+      <div style="position: absolute; left: 48px; bottom: 92px; width: 110px; height: 150px; border-radius: 8px; background: #56606E"></div>
+      <div style="position: absolute; left: 196px; bottom: 92px; width: 70px; height: 90px; border-radius: 35px 35px 6px 6px; background: #6E7B6A"></div>
+      <div style="position: absolute; right: 30px; top: 34px; width: 64px; height: 64px; border-radius: 50%; background: #C9B78A"></div>
+      <div style="position: absolute; inset: 22px; border: 2px solid rgba(255, 255, 255, 0.55); border-radius: 10px"></div>
+      <div style="position: absolute; top: 14px; left: 14px; display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 14px; background: rgba(11, 31, 58, 0.78); color: #FFFFFF; font-size: 12px; font-weight: 700">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>
+        Foto diambil
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px; background: #E9F7EF">
+      <div style="width: 30px; height: 30px; flex: none; border-radius: 50%; background: #138A4E; color: #FFFFFF; display: flex; align-items: center; justify-content: center">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 2px">
+        <span style="font-size: 14px; font-weight: 700; color: #0E6B3C">Gambar terdeteksi normal</span>
+        <span style="font-size: 13px; color: #34445C">Resolusi <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600">4000 × 3000</span> (12 MP)</span>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <span style="font-size: 16px; font-weight: 700">Apakah gambarnya jelas?</span>
+      <span style="font-size: 13px; color: #5B6B82">Foto hanya dicek di HP ini, lalu langsung dihapus.</span>
+    </div>
+  </main>
+
+  <footer style="display: flex; flex-direction: column; gap: 10px; padding: 14px 20px 28px">
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+      <button type="button" style="height: 52px; border: 1px solid #C9D2DF; border-radius: 12px; background: #FFFFFF; color: #0B1F3A; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer">Buram / rusak</button>
+      <button type="button" style="height: 52px; border: 0; border-radius: 12px; background: #3A77FF; color: #FFFFFF; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer">Ya, jelas</button>
+    </div>
+    <button type="button" style="height: 40px; border: 0; background: transparent; color: #2457D6; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer">Ambil ulang foto</button>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

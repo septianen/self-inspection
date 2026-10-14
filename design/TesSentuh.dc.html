@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Tes layar sentuh</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=IBM+Plex+Mono:wght@500;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2457D6}a:hover{color:#173E9E}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: #FFFFFF; color: #0B1F3A; font-family: 'Plus Jakarta Sans', system-ui, sans-serif">
+  <div style="position: absolute; inset: 0; display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); grid-template-rows: repeat(14, minmax(0, 1fr)); gap: 2px; padding: 2px; background: #E6EBF2">
+    <sc-for list="{{cells}}" as="cell" hint-placeholder-count="112">
+      <div style="{{cell.style}}"></div>
+    </sc-for>
+  </div>
+
+  <div style="position: absolute; top: 20px; left: 20px; right: 20px; display: flex; flex-direction: column; align-items: center; gap: 8px; pointer-events: none">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 24px; background: #0B1F3A; color: #FFFFFF; box-shadow: 0 6px 20px rgba(11, 31, 58, 0.25)">
+      <span style="font-size: 13px; font-weight: 600; color: #C5D3EA">Tes 1 dari 6</span>
+      <span style="width: 1px; height: 14px; background: #3B4E6B"></span>
+      <span style="font-size: 14px; font-weight: 700">Usap semua kotak</span>
+      <span style="font-size: 13px; font-weight: 600; font-family: 'IBM Plex Mono', monospace; color: #9EC0FF">68/112</span>
+    </div>
+  </div>
+
+  <div style="position: absolute; left: 20px; right: 20px; bottom: 28px; display: flex; flex-direction: column; gap: 10px">
+    <button type="button" style="height: 48px; border: 1px solid #C9D2DF; border-radius: 12px; background: #FFFFFF; color: #0B1F3A; font: inherit; font-size: 14px; font-weight: 700; box-shadow: 0 6px 20px rgba(11, 31, 58, 0.18); cursor: pointer">Ada area yang tidak bisa disentuh</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const cells = [];
+    for (let i = 0; i < 112; i++) {
+      const done = i < 68;
+      const edge = i === 68 || i === 69;
+      const bg = done ? '#3A77FF' : (edge ? '#9EC0FF' : '#FFFFFF');
+      cells.push({ style: 'background: ' + bg + '; border-radius: 3px' });
+    }
+    return { cells };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Laporan untuk pembeli</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=IBM+Plex+Mono:wght@500;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2457D6}a:hover{color:#173E9E}
+</style>
+</helmet>
+<div style="width: 390px; height: 1320px; box-sizing: border-box; background: #F4F7FB; color: #0B1F3A; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; display: flex; flex-direction: column">
+  <header style="display: flex; align-items: center; gap: 10px; padding: 16px 20px; background: #FFFFFF; border-bottom: 1px solid #E6EBF2">
+    <div style="width: 30px; height: 30px; border-radius: 9px; background: #3A77FF; color: #FFFFFF; display: flex; align-items: center; justify-content: center">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"></rect><path d="M9.5 12l2 2 3.5-4"></path></svg>
+    </div>
+    <span style="font-weight: 800; font-size: 16px">Self Inspection</span>
+    <span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; color: #5B6B82">#7K2Q9M</span>
+  </header>
+
+  <main style="flex: 1; display: flex; flex-direction: column; gap: 14px; padding: 20px 16px 28px">
+    <section style="display: flex; flex-direction: column; gap: 14px; padding: 18px; border-radius: 16px; background: #FFFFFF; border: 1px solid #E1E7F0">
+      <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #2457D6">Laporan inspeksi HP</span>
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <h1 style="margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.4px; text-wrap: balance">Samsung Galaxy A54 5G</h1>
+        <span style="font-size: 14px; color: #4A5A72">256 GB · Hitam</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #5B6B82">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"></rect><path d="M3.5 10h17M8 3v4M16 3v4"></path></svg>
+        <span>Diinspeksi 14 Okt 2026, 12.40 WIB</span>
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap">
+        <span style="padding: 6px 12px; border-radius: 16px; background: #E9F7EF; color: #0E6B3C; font-size: 13px; font-weight: 700">5 lulus</span>
+        <span style="padding: 6px 12px; border-radius: 16px; background: #FFF1E3; color: #9A4A06; font-size: 13px; font-weight: 700">1 bermasalah</span>
+      </div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; border-radius: 16px; background: #FFFFFF; border: 1px solid #E1E7F0; overflow: hidden">
+      <div style="padding: 16px 18px 6px"><span style="font-size: 16px; font-weight: 800">Hasil tes</span></div>
+      <sc-for list="{{rows}}" as="row" hint-placeholder-count="6">
+        <div style="{{row.rowStyle}}">
+          <div style="{{row.iconStyle}}">
+            <sc-if value="{{row.ok}}" hint-placeholder-val="{{true}}">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>
+            </sc-if>
+            <sc-if value="{{row.bad}}" hint-placeholder-val="{{false}}">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><path d="M12 6v8M12 18.5v.01"></path></svg>
+            </sc-if>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1">
+            <span style="font-size: 15px; font-weight: 700">{{row.name}}</span>
+            <span style="font-size: 13px; color: #5B6B82">{{row.detail}}</span>
+          </div>
+          <span style="{{row.pillStyle}}">{{row.status}}</span>
+        </div>
+      </sc-for>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 14px; padding: 18px; border-radius: 16px; background: #FFFFFF; border: 1px solid #E1E7F0">
+      <span style="font-size: 16px; font-weight: 800">Keterangan dari penjual</span>
+      <div style="display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 10px 12px; font-size: 14px">
+        <span style="color: #5B6B82">Kondisi fisik</span><span style="font-weight: 600">Lecet halus bekas pemakaian</span>
+        <span style="color: #5B6B82">Kelengkapan</span><span style="font-weight: 600">Dus, kabel data</span>
+        <span style="color: #5B6B82">Catatan</span><span style="font-weight: 600; line-height: 1.5">Pemakaian 1,5 tahun, belum pernah servis. Garansi resmi SEIN.</span>
+      </div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 14px; padding: 18px; border-radius: 16px; background: #FFFFFF; border: 1px solid #E1E7F0">
+      <span style="font-size: 16px; font-weight: 800">Info perangkat</span>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 14px">
+        <div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px; color: #5B6B82">Sistem operasi</span><span style="font-size: 14px; font-weight: 600">Android 14</span></div>
+        <div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px; color: #5B6B82">Resolusi layar</span><span style="font-size: 14px; font-weight: 600; font-family: 'IBM Plex Mono', monospace">1080 × 2340</span></div>
+        <div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px; color: #5B6B82">RAM</span><span style="font-size: 14px; font-weight: 600">8 GB atau lebih</span></div>
+        <div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px; color: #5B6B82">Prosesor</span><span style="font-size: 14px; font-weight: 600">8 inti</span></div>
+      </div>
+    </section>
+
+    <div style="display: flex; gap: 10px; padding: 14px 16px; border-radius: 12px; background: #EAF1FF; font-size: 13px; line-height: 1.5; color: #22324A">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2457D6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin-top: 1px"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 7.5v.01"></path></svg>
+      <span>Inspeksi dilakukan mandiri oleh penjual langsung di HP ini lewat browser. Tetap cek ulang saat bertemu penjual.</span>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1320}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const data = [
+      ['Layar sentuh', 'Semua 112 area merespons', 'Lulus'],
+      ['Warna layar', 'Tidak ada titik mati atau garis', 'Lulus'],
+      ['Kamera belakang', '12 MP, gambar jelas', 'Lulus'],
+      ['Kamera depan', '8 MP, gambar jelas', 'Lulus'],
+      ['Speaker', 'Penjual tidak bisa mengenali suara uji', 'Bermasalah'],
+      ['Mikrofon', 'Suara terdeteksi dan jelas', 'Lulus']
+    ];
+    const rows = data.map((d, i) => {
+      const ok = d[2] === 'Lulus';
+      return {
+        name: d[0], detail: d[1], status: d[2], ok, bad: !ok,
+        rowStyle: 'display: flex; align-items: center; gap: 12px; padding: 12px 18px' + (i > 0 ? '; border-top: 1px solid #EEF1F5' : ''),
+        iconStyle: 'width: 26px; height: 26px; flex: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #FFFFFF; background: ' + (ok ? '#138A4E' : '#C25E0A'),
+        pillStyle: 'flex: none; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; ' + (ok ? 'background: #E9F7EF; color: #0E6B3C' : 'background: #FFF1E3; color: #9A4A06')
+      };
+    });
+    return { rows };
+  }
+}
+</script>
+</body>
+</html>
