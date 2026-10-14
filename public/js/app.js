@@ -7,7 +7,9 @@ import { detectDevice, formatDevice, isAndroidChrome } from './device.js';
 import { initPhoneForm, fillPhone, isPhoneValid } from './phone-form.js';
 import * as touchTest from './tests/touch.js';
 import * as colorTest from './tests/color.js';
-import * as placeholderTest from './tests/placeholder.js';
+import * as cameraTest from './tests/camera.js';
+import * as speakerTest from './tests/speaker.js';
+import * as micTest from './tests/mic.js';
 import { requestMediaPermissions, keepScreenOn, allowScreenOff } from './util.js';
 
 const STORAGE_KEY = 'selfInspection.session.v1';
@@ -89,6 +91,7 @@ function showScreen(name, { push = true } = {}) {
     history.replaceState({ screen: name }, '');
   }
 
+  arrivedByBack = false;
   render(name);
 }
 
@@ -114,6 +117,9 @@ function render(name) {
   if (heading) heading.focus({ preventScroll: true });
 }
 
+// true jika layar saat ini dicapai lewat tombol back (popstate), bukan maju.
+let arrivedByBack = false;
+
 // Tombol back Android / Chrome memicu 'popstate' dengan state entri riwayat sebelumnya.
 window.addEventListener('popstate', (event) => {
   const name = event.state && event.state.screen;
@@ -124,6 +130,7 @@ window.addEventListener('popstate', (event) => {
     return;
   }
 
+  arrivedByBack = true;
   if (name && isValidScreen(name)) {
     state.screen = name;
     saveState();
@@ -190,14 +197,14 @@ nextBtn.addEventListener('click', () => showScreen('test-1'));
 
 // ---------- Menjalankan tes ----------
 
-// Urutan tes. Tes 3-6 masih placeholder (M4).
+// Urutan tes (sama dengan docs/API.md).
 const TESTS = [
   { key: 'touch', module: touchTest },
   { key: 'color', module: colorTest },
-  { key: 'cameraBack', module: placeholderTest, facing: 'environment' },
-  { key: 'cameraFront', module: placeholderTest, facing: 'user' },
-  { key: 'speaker', module: placeholderTest },
-  { key: 'mic', module: placeholderTest },
+  { key: 'cameraBack', module: cameraTest, facing: 'environment' },
+  { key: 'cameraFront', module: cameraTest, facing: 'user' },
+  { key: 'speaker', module: speakerTest },
+  { key: 'mic', module: micTest },
 ];
 
 const testRoot = document.getElementById('test-root');
@@ -223,13 +230,22 @@ function startTest(n) {
   activeController = controller;
 
   testRoot.replaceChildren();
-  const ctx = { index: n, total: TEST_COUNT, facing: def.facing, signal: controller.signal };
+  const ctx = {
+    index: n, total: TEST_COUNT, facing: def.facing,
+    permissions: state.permissions, signal: controller.signal,
+  };
 
   def.module.run(testRoot, ctx)
     .then((result) => {
       if (controller.signal.aborted) return;
       state.results[def.key] = result;
       saveState();
+      // Tes yang dilewati otomatis karena izin ditolak tidak boleh menjebak pengguna:
+      // jika layar ini dicapai dengan tombol back, lanjutkan mundur.
+      if (result.status === 'skipped' && result.data.reason === 'no_permission' && arrivedByBack) {
+        goBack();
+        return;
+      }
       showScreen(n < TEST_COUNT ? `test-${n + 1}` : 'summary');
     })
     .catch((error) => {
